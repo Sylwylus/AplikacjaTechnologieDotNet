@@ -1,15 +1,23 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - PlanszoWeb</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/themes/base/jquery-ui.css")
+    @Styles.Render("~/Content/bootstrap.css")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -17,28 +25,63 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("PlanszoWeb", "Index", "Home", null, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    <li>@Html.ActionLink("All games", "Index", "Game")</li>
+    <li>@Html.ActionLink("Top 20 games", "Top20Games", "Game")</li>
+    <li>@Html.ActionLink("Reviews", "Index", "Review")</li>
+    @if (!User.Identity.Name.Equals(""))
+    {
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> User's Panel <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Added review", "AddedReviews", "Account")</li>
+                <li>@Html.ActionLink("Gameplays", "UserGameplays", "Account")</li>
+                <li>@Html.ActionLink("Added Comments", "AddedComments", "Account")</li>
+                <li>@Html.ActionLink("Raport problem", "Create", "Problem")</li>
+            </ul>
+        </li>
+    }
+    @if (User.IsInRole("Moderator"))
+    {
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Moderator's Panel <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Games to accept", "NotAcceptedGames", "Game")</li>
+                <li>@Html.ActionLink("Reviews to accept", "NotAcceptedReviews", "Review")</li>
+            </ul>
+        </li>
+    }
+    @if (User.IsInRole("Administrator"))
+    {
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Administrator's Panel <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Problems", "Index", "Problem")</li>
+                <li>@Html.ActionLink("Moderators", "Index", "Roles")</li>
+                <li>@Html.ActionLink("Users", "Index", "Users")</li>
+                <li>@Html.ActionLink("Statistics", "Statistics", "Home")
+        </li>
+            </ul>
+                    </li>
+    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" style="margin-top: 20px;" >
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer style="float:none">
+            <p>&copy; @DateTime.Now.Year - SerwisPlanszowkowy. </p>
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+
+ 
     @RenderSection("scripts", required: false)
 </body>
 </html>

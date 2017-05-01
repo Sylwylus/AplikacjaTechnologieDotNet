@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Domain.Model.Comment>
+@{
+    ViewBag.Title = "AddedComments";
+}
+
+<h2>My comments</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName( "Game")
+        </th>
+      
+        <th>
+            @Html.DisplayName("Published date")
+        </th>
+        <th>
+            @Html.DisplayName("Content")
+        </th>
+      
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Game.Name)
+            </td>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.PublishedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Content)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete","Comment", new { id = item.Id }, null)
+            </td>
+        </tr>
+    }
+
+</table>

@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerwisPlanszowkowy", "Serwi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerwisPlanszowkowy.Tests", "SerwisPlanszowkowy.Tests\SerwisPlanszowkowy.Tests.csproj", "{499499B4-A2B5-43BA-971D-8178748E6C82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{BED27F14-2CCB-454C-8CD7-47FBC6B116C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{95F02CDD-1CF7-465E-B410-3E0E02C6C3F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{499499B4-A2B5-43BA-971D-8178748E6C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{499499B4-A2B5-43BA-971D-8178748E6C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{499499B4-A2B5-43BA-971D-8178748E6C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BED27F14-2CCB-454C-8CD7-47FBC6B116C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BED27F14-2CCB-454C-8CD7-47FBC6B116C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BED27F14-2CCB-454C-8CD7-47FBC6B116C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BED27F14-2CCB-454C-8CD7-47FBC6B116C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95F02CDD-1CF7-465E-B410-3E0E02C6C3F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95F02CDD-1CF7-465E-B410-3E0E02C6C3F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95F02CDD-1CF7-465E-B410-3E0E02C6C3F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95F02CDD-1CF7-465E-B410-3E0E02C6C3F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,180 @@
+﻿@model SerwisPlanszowkowy.ViewModels.GameDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+<div>
+    <img src='@Model.PhotoSource' style="vertical-align: middle; max-height: 150px; max-width: 150px; float: left"> <h2 style="padding-top: 70px;">@Model.Name</h2>
+</div>
+<div style="clear:both">
+   
+    <hr />
+    <dl class="dl-horizontal">
+  
+        <dt>
+            @Html.DisplayNameFor(model => model.Publisher)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Publisher)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PublishedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PublishedDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PlayingTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PlayingTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MinNumberOfPlayers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MinNumberOfPlayers)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxNumberOfPlayers)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxNumberOfPlayers)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SuggestedAge)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SuggestedAge)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AvarageRate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AvarageRate) (@Html.DisplayFor(model => model.Rates.Count) votes)
+        </dd>
+        <dt>
+            <b>Your rate</b>
+        </dt>
+       
+            @if (!User.Identity.Name.Equals(""))
+             {
+                 int existingRate = 0;
+                 foreach (var item in Model.Rates)
+                 {
+                     if (item.User.UserName == User.Identity.Name)
+                     {
+                         <dd> 
+                             @Html.DisplayFor(modelItem => item.Value)
+                         </dd>
+                         existingRate = item.Id;
+                     }
+
+                 }
+
+                
+                 if (existingRate > 0)
+                 {
+                     <dd>
+                         @Html.ActionLink("edit rate", "Edit", "Rate", new {id = existingRate}, null)
+                     </dd>
+                 }
+                 else if (existingRate == 0 && !User.Identity.Name.Equals(""))
+                 {
+                     <dd>
+                         @Html.ActionLink("add rate", "Create", "Rate", new {gameId = Model.Id}, null)
+                     </dd>
+                 }
+             }
+            else
+            {
+                <dd>      
+                  @Html.ActionLink("Log in", "Login", "Account", null, null)
+                    </dd>
+            }
+
+        
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+</div>
+     
+
+
+<br/>
+
+    
+
+
+<hr />
+<div style="margin-left: 100px;">
+    <span style="font-size: 20px;"><b>Comments      </b></span>  @if (!User.Identity.Name.Equals(""))
+{
+
+    @Html.ActionLink("     add comment", "Create", "Comment", new { gameId = Model.Id }, null)
+
+    }
+</div>
+  
+<br />
+    <dl class="dl-horizontal">
+
+       
+
+        @foreach (var item in Model.Comments)
+        {
+            <dd>
+                @Html.DisplayFor(modelItem => item.Content)
+                <br />~ @Html.DisplayFor(modelItem => item.User.UserName)
+                <br /><i>@Html.DisplayFor(modelItem => item.PublishedDate)</i>
+                @if (User.Identity.Name.Equals(item.User.UserName) || User.IsInRole("Moderator"))
+                {
+                    <br />@Html.ActionLink("edit", "Edit", "Comment", new { id = item.Id }, null)
+                }
+                <br /><br />
+            </dd>
+        }
+        @if (Model.Comments.Count == 0)
+        {
+            <dd>
+                <i>no comments</i>
+            </dd>
+        }
+
+
+
+
+    </dl>
+
+
+
+    <p>
+        @Html.ActionLink("Go to games", "Index")
+    </p>

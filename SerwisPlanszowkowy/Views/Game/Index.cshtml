@@ -1,0 +1,94 @@
+﻿@model PagedList.IPagedList<SerwisPlanszowkowy.ViewModels.GameViewModel>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Games</h2>
+<hr/>
+
+    @if (!User.Identity.Name.Equals(""))
+    {
+        <p>
+            @Html.ActionLink("Add new game", "Create")
+        </p>
+    }
+    @using (Html.BeginForm("Index", "Game", FormMethod.Get))
+    {
+        <p>Filter
+            
+             by name or publisher: @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control-inOneLine" })
+            or by Category: @Html.DropDownList("filterCategory", (SelectList)ViewBag.Categorys, "All", htmlAttributes: new { @class = "form-control-inOneLine" })
+            <input type="submit" value="Filter" style="margin-left: 50px;"class="btn btn-primary" />
+        </p>
+    }
+
+<br />
+
+<table class="table">
+    <tr>
+        <th>
+           
+            @Html.DisplayName("Photo")
+        </th>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter=ViewBag.CurrentFilter })
+         
+        </th>
+        <th>
+            @Html.ActionLink("Publisher", "Index", new { sortOrder = ViewBag.PublisherSortParm , currentFilter=ViewBag.CurrentFilter})
+         
+        </th>
+        <th>
+            @Html.ActionLink("Avarage rate", "Index", new { sortOrder = ViewBag.RateSortParm, currentFilter=ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Category", "Index", new { sortOrder = ViewBag.CategorySortParm , currentFilter=ViewBag.CurrentFilter})
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+        if(item.Accepted.Equals(true))
+    {
+    <tr>
+        <td>
+            <img src='@item.PhotoSource' style="max-height:75px; max-width:75px;" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Publisher)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AvarageRate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CategoryName)
+        </td>
+
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.Id })
+            @{
+                String przerwa=" | ";
+                if (User.IsInRole("Moderator"))
+                    {
+                      @przerwa @Html.ActionLink("Edit", "Edit", new { id=item.Id }) @przerwa @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                    }
+            }    
+             
+            
+        </td>
+    </tr>
+    }
+}
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, currentFilterCategory = ViewBag.CurrentFilterCategory }))

@@ -1,0 +1,77 @@
+﻿@model SerwisPlanszowkowy.ViewModels.UserEditViewModel
+@{
+    ViewBag.Title = "EditProfileData";
+}
+
+<h2>Edit your profile data</h2>
+
+@using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <hr />
+   @Html.HiddenFor(model => model.Id)
+     @Html.HiddenFor(model => model.RegisterDate)
+                  <div class="form-group">
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" , @readonly="readonly"  })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.DateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", @id = "dateOfBirth" })
+            @Html.ValidationMessageFor(model => model.DateOfBirth, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+   
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Edit" />
+        </div>
+    </div>
+    
+   <p>
+    @Html.ActionLink("Back", "UserProfileData") 
+  
+</p>
+}
+@section Scripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#dateOfBirth").datepicker({
+                dateFormat: 'yy-mm-dd',
+                minDate: (-365) * 99,
+                maxDate: (-365) * 5,
+                changeMonth: true,
+                changeYear: true
+
+            });
+            $("#dateOfBirth").keypress(function (event) { event.preventDefault(); });
+        });
+    </script>
+}

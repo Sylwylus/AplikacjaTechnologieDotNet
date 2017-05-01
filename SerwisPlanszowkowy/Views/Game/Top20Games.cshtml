@@ -1,0 +1,61 @@
+﻿@model IEnumerable<SerwisPlanszowkowy.ViewModels.GameDetailsViewModel>
+
+@{
+    ViewBag.Title = "Top20Games";
+}
+
+<h2>Top 20 Games</h2>
+
+<hr/>
+    <table class="table table-striped">
+    <tr style="background-color: #97310e; color: white; height: 30px;">
+        <th style=" text-align: center" align="center" valign="middle" width="175px">Place</th>
+        <th style=" text-align: center" align="center" valign="middle" width="175px">@Html.DisplayNameFor(model => model.Photo)</th>
+        <th style=" text-align: center" align="center" valign="middle" width="175px">@Html.DisplayNameFor(model => model.Name)</th>
+        <th style=" text-align: center" align="center" valign="middle" width="175px">@Html.DisplayNameFor(model => model.AvarageRate)</th>
+        <th style=" text-align: center" align="center" valign="middle" width="175px">@Html.DisplayNameFor(model => model.CategoryName)</th>
+        <th style=" text-align: center" align="center" valign="middle" width="175px">@Html.DisplayNameFor(model => model.Publisher)</th>
+        <th style=" text-align: center" align="center" valign="middle" width="175px"></th>
+    </tr>
+
+
+    @{
+        int u = 0;
+        foreach (var item in Model)
+        {
+            if (item.Accepted.Equals(true))
+            {
+                String kropka = ".";
+                String glosy = " votes";
+                u++;
+                <tr>
+                    <th style="text-align: center" align="center" valign="middle" width="50px" height="175px">@u@kropka</th>
+                    <td  align="center" valign="middle" width="175px" height="175px"><img src='@item.PhotoSource' style="max-height:150px; max-width:150px;" /></td>
+                    <td align="center" valign="middle" width="25%" height="175px">@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td align="center" valign="bottom" width="80px" height="90px">@Html.DisplayFor(modelItem => item.AvarageRate) (@item.Rates.Count votes)</td>
+                    <td align="center" valign="middle" width="150px" height="175px">@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                    <td width="20%" align="center" valign="bottom" height="90px">@Html.DisplayFor(modelItem => item.Publisher)</td>
+                    <td align="center" valign="middle" width="75px" height="175px">@Html.ActionLink("Details", "Details", new { id = item.Id })</td>
+                </tr>
+              
+                 
+
+
+            }
+            if (u == 20)
+            {
+                break;
+            }
+        }
+
+    }
+
+
+</table>
+
+
+
+
+
+    
+

@@ -1,0 +1,39 @@
+﻿@model SerwisPlanszowkowy.ViewModels.UserStatisticsViewModel
+@{
+    ViewBag.Title = "UserStatistics";
+}
+
+<h2>Your statistics</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt style="width: 200px; margin-right: 15px; ">
+            @Html.DisplayNameFor(model => model.NumberOfAddedComments)
+        </dt>
+
+        <dd >
+            @Html.DisplayFor(model => model.NumberOfAddedComments)
+        </dd>
+
+       
+
+        <dt style="width: 200px; margin-right: 15px; margin-top: 15px;">
+            @Html.DisplayNameFor(model => model.NumberOfAddedRates)
+        </dt>
+
+        <dd style="margin-top: 15px;">
+            @Html.DisplayFor(model => model.NumberOfAddedRates)
+        </dd>
+        <dt style="width: 200px; margin-right: 15px; margin-top: 15px;">
+            @Html.DisplayNameFor(model => model.AvarageOfAddedRates)
+        </dt>
+
+        <dd style=" margin-top: 15px;">
+            @Html.DisplayFor(model => model.AvarageOfAddedRates)
+        </dd>
+      
+
+
+    </dl>
+</div>

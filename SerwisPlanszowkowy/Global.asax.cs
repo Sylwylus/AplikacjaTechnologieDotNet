@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SerwisPlanszowkowy.App_Start;
+using SerwisPlanszowkowy.Mappings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +18,14 @@ namespace SerwisPlanszowkowy
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //  Database.SetInitializer(new DatabaseInitializer());//
+            //  using (var context = new CrudContext())//
+            // {//
+            //    context.Database.Initialize(true);//
+            //  }//
+
+            AutoMapperConfig.Configure();
+            AddAdminAndModerator.InitialRoleUser();
         }
     }
 }

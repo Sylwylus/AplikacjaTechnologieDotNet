@@ -1,0 +1,31 @@
+﻿@model IEnumerable<PlanszoWeb.ViewModels.NewsViewModel>
+
+@{
+    ViewBag.Title = "News";
+}
+
+
+<table>
+    <tr>
+        <td valign="top" width="25%"></td>
+        <td rowspan="2" valign="top" width="50%">
+            <h3>News </h3>
+            <hr />
+            @foreach (var item in Model)
+                {
+                    <h4><b>@Html.DisplayFor(modelItem => item.Title)</b></h4>
+                    <h6><i>@Html.DisplayFor(modelItem => item.PublishedDate),  @Html.DisplayFor(modelItem => item.User.UserName)</i></h6>
+                    @Html.DisplayFor(modelItem => item.Content)
+    <br />
+                    if (User.IsInRole("Moderator"))
+                    {
+                        String kreseczka=" | ";
+                        @Html.ActionLink("edit", "Edit", "News", new { id = item.Id }, null) @kreseczka @Html.ActionLink("delete", "Delete", "News", new { id = item.Id }, null)
+                    }
+                    <br />
+                    <br />
+                }
+        </td>
+        <td valign="top" width="25%"></td>
+    </tr>
+</table>
