@@ -55,7 +55,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseWebDriverTest.cs" />
     <Compile Include="HomePageTest.cs" />
+    <Compile Include="LoginTest.cs" />
+    <Compile Include="ModeratorPanelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,20 +2,30 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 
 namespace IntegrationTests
 {
     [TestClass]
-    public class HomePageTest
+    public class HomePageTest : BaseWebDriverTest
     {
-        [TestMethod]
-        public void GetHomePage()
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
         {
-            IWebDriver driver = new ChromeDriver();
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(5));
-            driver.Navigate().GoToUrl("localhost:9083");
+            ClassInitialize();
+        }
 
+        [ClassCleanup]
+        public static void ClassCleanup()
+        {
+            BaseWebDriverTest.ClassCleanup();
+        }
+
+        [TestMethod]
+        public void GoToAllGames()
+        {
+            String path = "/Game";
+            Click(By.PartialLinkText(path));
+            AssertCurrentPage(BaseUrl + path);
         }
     }
 }
