@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 
 namespace IntegrationTests
 {
@@ -9,7 +10,7 @@ namespace IntegrationTests
     {
         public const string BaseUrl = "http://localhost:9083";
 
-        private const int TimeOut = 10;
+        private const int TimeOut = 30;
 
         private static readonly IWebDriver StaticDriver = CreateDriverInstance();
         private static User _currentlyLoggedInAs;
@@ -25,6 +26,10 @@ namespace IntegrationTests
             if (user != null)
             {
                 Login(user);
+            }
+            else
+            {
+                StaticDriver.Navigate().GoToUrl(BaseUrl);
             }
         }
 
@@ -69,6 +74,25 @@ namespace IntegrationTests
         {
             var absoluteUrl = new Uri(new Uri(BaseUrl), pageUrl.Trim('~')).ToString();
             Assert.AreEqual(absoluteUrl, Driver.Url);
+        }
+
+        public void WaitForTheNewPage(string newUrl)
+        {
+            WebDriverWait wait = new WebDriverWait(Driver,
+                TimeSpan.FromSeconds(TimeOut));
+            wait.Until(d => d.Url.Equals(BaseUrl + newUrl));
+        }
+
+        public IWebElement GetElement(string id)
+        {
+            return Driver.FindElement(By.Id(id));
+        }
+
+        public void Type(string id, string text)
+        {
+            var element = GetElement(id);
+            element.Clear();
+            element.SendKeys(text);
         }
 
         private static void Login(User user)
