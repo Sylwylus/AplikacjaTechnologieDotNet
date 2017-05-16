@@ -71,7 +71,7 @@ namespace IntegrationTests
             Assert.AreEqual(absoluteUrl, Driver.Url);
         }
 
-        public static void Login(User user)
+        private static void Login(User user)
         {
             StaticDriver.Navigate().GoToUrl(BaseUrl + "/Account/Login");
 

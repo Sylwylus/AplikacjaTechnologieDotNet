@@ -6,6 +6,12 @@ namespace IntegrationTests
     public class LoginTest : BaseWebDriverTest
     {
 
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            ClassInitialize(Users.Moderator);
+        }
+
         [ClassCleanup]
         public static void ClassCleanup()
         {
@@ -15,7 +21,7 @@ namespace IntegrationTests
         [TestMethod]
         public void LoginAsModerator()
         {
-            Login(Users.Moderator);
+            AssertCurrentPage(BaseUrl);
         }
     }
 }

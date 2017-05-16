@@ -17,7 +17,7 @@ namespace IntegrationTests
             BaseWebDriverTest.ClassCleanup();
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void ShowNotAcceptedGames()
         {
             Open("/Game/NotAcceptedGames");
