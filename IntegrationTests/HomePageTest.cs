@@ -27,5 +27,13 @@ namespace IntegrationTests
             Click(By.PartialLinkText(path));
             AssertCurrentPage(BaseUrl + path);
         }
+
+        [TestMethod]
+        public void GoToGameDetails()
+        {
+            String path = "/Game/Details/14";
+            Click(By.PartialLinkText(path));
+            AssertCurrentPage(BaseUrl + path);
+        }
     }
 }
