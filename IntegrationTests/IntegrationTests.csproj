@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="BaseWebDriverTest.cs" />
     <Compile Include="HomePageTest.cs" />
-    <Compile Include="AccountTests\LoginTest.cs" />
+    <Compile Include="AccountTests\LoginLogoffTest.cs" />
     <Compile Include="ModeratorPanelTests\GamesToAcceptTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AccountTests\RegistrationTest.cs" />
