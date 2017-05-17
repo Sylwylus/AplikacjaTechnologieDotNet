@@ -10,7 +10,7 @@ namespace IntegrationTests
     {
         public const string BaseUrl = "http://localhost:9083";
 
-        private const int TimeOut = 30;
+        private const int TimeOut = 5;
 
         private static readonly IWebDriver StaticDriver = CreateDriverInstance();
         private static User _currentlyLoggedInAs;
@@ -80,7 +80,13 @@ namespace IntegrationTests
         {
             WebDriverWait wait = new WebDriverWait(Driver,
                 TimeSpan.FromSeconds(TimeOut));
-            wait.Until(d => d.Url.Equals(BaseUrl + newUrl));
+            wait.Until(d => d.Url.Contains(BaseUrl + newUrl));
+        }
+
+        public void Wait(Func<IWebDriver, bool> condition, double milisecondsToWait)
+        {
+            var wait = new WebDriverWait(StaticDriver, TimeSpan.FromMilliseconds(milisecondsToWait));
+            wait.Until(condition);
         }
 
         public IWebElement GetElement(string id)
@@ -95,6 +101,11 @@ namespace IntegrationTests
             element.SendKeys(text);
         }
 
+        public void AssertTextContains(By locator, string text)
+        {
+            Assert.IsTrue(Driver.FindElement(locator).Text.Contains(text));
+        }
+
         private static void Login(User user)
         {
             StaticDriver.Navigate().GoToUrl(BaseUrl + "/Account/Login");
@@ -105,6 +116,7 @@ namespace IntegrationTests
             _currentlyLoggedInAs = user;
         }
     }
+
     public class User
     {
         public User(string username, string password)
@@ -132,10 +144,7 @@ namespace IntegrationTests
     {
         public static User Moderator
         {
-            get
-            {
-                return new User("Minion", "asdfghj1");
-            }
+            get { return new User("Minion", "asdfghj1"); }
         }
     }
 }
