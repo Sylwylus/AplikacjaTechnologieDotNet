@@ -57,12 +57,16 @@
   <ItemGroup>
     <Compile Include="BaseWebDriverTest.cs" />
     <Compile Include="HomePageTest.cs" />
-    <Compile Include="LoginTest.cs" />
-    <Compile Include="ModeratorPanelTest.cs" />
+    <Compile Include="AccountTests\LoginTest.cs" />
+    <Compile Include="ModeratorPanelTests\GamesToAcceptTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AdministratorPanelTests\" />
+    <Folder Include="UserPanelTests\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
