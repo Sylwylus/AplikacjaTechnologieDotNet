@@ -71,6 +71,11 @@ namespace IntegrationTests
             Assert.AreEqual(absoluteUrl, Driver.Url);
         }
 
+        public void AssertTextContains(By locator, string text)
+        {
+            Assert.IsTrue(Driver.FindElement(locator).Text.Contains(text));
+        }
+
         private static void Login(User user)
         {
             StaticDriver.Navigate().GoToUrl(BaseUrl + "/Account/Login");
