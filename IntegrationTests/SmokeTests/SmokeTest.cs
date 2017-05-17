@@ -17,6 +17,14 @@ namespace IntegrationTests
         private static string OldNewsURL = "/Home/OldNews";
         private static string SomeGameDetailsURL = "/Game/Details/14";
 
+        private static string LoginTitle = "Log in - PlanszoWeb";
+        private static string RegistrationTitle = "Register - PlanszoWeb";
+        private static string AllGamesTitle = "Index - PlanszoWeb";
+        private static string Top20Title = "Top20Games - PlanszoWeb";
+        private static string ReviewTitle = "";//unknown
+        private static string OldNewsTitle = "";//unknown
+        private static string SomeGameDetailsTitle = "Details - PlanszoWeb";
+
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
         {
