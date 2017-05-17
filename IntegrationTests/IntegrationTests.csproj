@@ -61,6 +61,7 @@
     <Compile Include="ModeratorPanelTests\GamesToAcceptTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AccountTests\RegistrationTest.cs" />
+    <Compile Include="SearchingTests\SearchingTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
