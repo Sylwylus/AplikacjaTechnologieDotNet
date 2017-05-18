@@ -23,19 +23,20 @@ namespace SerwisPlanszowkowy.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private CrudContext db = new CrudContext();
-      
-        public AccountController()
-            : this(new ApplicationUserManager(new CustomUserStore(new CrudContext())))
-        {
-        }
+        private CrudContext db { get; set; }
+        public ApplicationUserManager ApplicationUserManager { get; private set; }
 
-        public AccountController(ApplicationUserManager applicationUserManager)
+        public AccountController(CrudContext context, ApplicationUserManager applicationUserManager) 
         {
+            db = context;
             ApplicationUserManager = applicationUserManager;
         }
 
-        public ApplicationUserManager ApplicationUserManager { get; private set; }
+      
+
+      
+
+     
 
         //
         // GET: /Account/Login

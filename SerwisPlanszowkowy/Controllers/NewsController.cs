@@ -8,17 +8,24 @@ using System.Web;
 using System.Web.Mvc;
 using Data;
 using Domain.Model;
+using Application.Services;
 
 namespace SerwisPlanszowkowy.Controllers
 {
     public class NewsController : Controller
     {
-        private CrudContext db = new CrudContext();
+        private INewsService _newsService { get; set; }
+        private IUserService _userService { get; set; }
+        public NewsController(IUserService userService, INewsService newsService)
+        {
+            _userService = userService;
+            _newsService = newsService;
+        }
 
         // GET: News
         public ActionResult Index()
         {
-            var news = db.News.Include(n => n.User);
+            var news = _newsService.GetNews();
             return View(news.ToList());
         }
 
@@ -29,7 +36,7 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            News news = db.News.Find(id);
+            News news = _newsService.GetNewsById((int)id);
             if (news == null)
             {
                 return HttpNotFound();
@@ -40,30 +47,20 @@ namespace SerwisPlanszowkowy.Controllers
         // GET: News/Create
         public ActionResult Create()
         {
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName");
+            ViewBag.UserId = new SelectList(_userService.GetUsers(), "Id", "FirstName");
             return View();
         }
 
-        // POST: News/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: News/Create    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,PublishedDate,Title,Content,UserId")] News news)
         {
-            foreach (var item in db.Users)
-            {
-                if (item.UserName == User.Identity.Name)
-                {
-                    news.UserId = item.Id;
-                }
-            }
-            news.PublishedDate = DateTime.Now;
+           
 
             if (ModelState.IsValid)
             {
-                db.News.Add(news);
-                db.SaveChanges();
+                _newsService.CreateNews(news, User.Identity.Name);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -77,12 +74,12 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            News news = db.News.Find(id);
+            News news = _newsService.GetNewsById((int)id);
             if (news == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", news.UserId);
+            ViewBag.UserId = new SelectList(_userService.GetUsers(), "Id", "FirstName", news.UserId);
             return View(news);
         }
 
@@ -95,11 +92,10 @@ namespace SerwisPlanszowkowy.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(news).State = EntityState.Modified;
-                db.SaveChanges();
+                _newsService.EditNews(news);
                 return RedirectToAction("Index", "Home");
             }
-            ViewBag.UserId = new SelectList(db.Users, "Id", "FirstName", news.UserId);
+            ViewBag.UserId = new SelectList(_userService.GetUsers(), "Id", "FirstName", news.UserId);
             return View(news);
         }
 
@@ -110,7 +106,7 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            News news = db.News.Find(id);
+            News news = _newsService.GetNewsById((int)id);
             if (news == null)
             {
                 return HttpNotFound();
@@ -123,19 +119,10 @@ namespace SerwisPlanszowkowy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            News news = db.News.Find(id);
-            db.News.Remove(news);
-            db.SaveChanges();
+            _newsService.RemoveNews(id);
             return RedirectToAction("Index", "Home");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+      
     }
 }

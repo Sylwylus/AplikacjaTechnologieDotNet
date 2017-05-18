@@ -13,12 +13,36 @@ namespace Data.Identity
 {
     public class ApplicationUserManager : UserManager<User, int>
     {
-        public ApplicationUserManager(IUserStore<User, int> store)
+        public ApplicationUserManager(IUserStore<User, int> store, IdentityFactoryOptions<ApplicationUserManager> options)
             : base(store)
         {
+            
+            this.UserValidator = new UserValidator<User, int>(this)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = true
+            };
+
+            this.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 6,
+                RequireNonLetterOrDigit = true,
+                RequireDigit = true,
+                RequireLowercase = false,
+                RequireUppercase = false,
+            };
+
+            var dataProtectionProvider = options.DataProtectionProvider;
+            if (dataProtectionProvider != null)
+            {
+                this.UserTokenProvider =
+                    new DataProtectorTokenProvider<User, int>(
+                        dataProtectionProvider.Create("ASP.NET Identity"));
+            }
+          
         }
 
-        public static ApplicationUserManager Create(
+      /*  public static ApplicationUserManager Create(
             IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(
@@ -47,6 +71,6 @@ namespace Data.Identity
                         dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
-        }
+        }*/
     } 
 }

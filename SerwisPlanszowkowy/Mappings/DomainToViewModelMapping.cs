@@ -33,6 +33,7 @@ namespace SerwisPlanszowkowy.Mappings
                 .ForMember(dest => dest.NumberOfAddedReviews, opts => opts.MapFrom(src => src.Reviews.Count()))
                 .ForMember(dest => dest.NumberOfAddedGameplays, opts => opts.MapFrom(src => src.Gameplays.Count()));
             CreateMap<Game, GameCreateEditViewModel>();
+            CreateMap<Review, ReviewViewModel>();
         }
     }
 }

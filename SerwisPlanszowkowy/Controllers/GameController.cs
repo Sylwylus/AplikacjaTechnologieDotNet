@@ -11,12 +11,17 @@ using Domain.Model;
 using Data;
 using SerwisPlanszowkowy.ViewModels;
 using PagedList;
+using Application.Services;
 
 namespace SerwisPlanszowkowy.Controllers
 {
     public class GameController : Controller
     {
-        private CrudContext db = new CrudContext();
+        private IGameService _gameService { get; set; }
+        public GameController(IGameService gameService)
+        {
+            _gameService = gameService;
+        }
 
         // GET: /Game/
         public ActionResult Index(string currentFilter, string searchString, int? page, string sortOrder, int? filterCategory, int? currentFilterCategory)
@@ -26,7 +31,7 @@ namespace SerwisPlanszowkowy.Controllers
             ViewBag.RateSortParm = sortOrder == "Rate" ? "rate_desc" : "Rate";
             ViewBag.CategorySortParm = sortOrder == "Category" ? "category_desc" : "Category";
             ViewBag.PublisherSortParm = sortOrder == "Publisher" ? "publisher_desc" : "Publisher";
-            ViewBag.Categorys = new SelectList(db.Categorys, "Id", "Name", "filterCategory");
+            ViewBag.Categorys = new SelectList(_gameService.GetCategoriesDictionary(), "Id", "Name", "filterCategory");
             if (!String.IsNullOrEmpty(searchString) || filterCategory != null)
             {
                 page = 1;
@@ -46,51 +51,43 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 ViewBag.CurrentFilterCategory = filterCategory;
             }
-            var gamess = db.Games.Include(g => g.Category).Where(c => c.Accepted == true);
+            var games = _gameService.GetFilteredGames(searchString, filterCategory);
 
-           if (!String.IsNullOrEmpty(searchString))
-           {
-               gamess = gamess.Where(s => s.Name.Contains(searchString)|| s.Publisher.Contains(searchString));
-           }
-           if (filterCategory!=null)
-           {
-               gamess = gamess.Where(s => s.CategoryId == filterCategory);
-           } 
-            var viewModelList = (Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(gamess));
+            var viewModelList = (Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games));
             
-            var games = from s in viewModelList
+            var gamesVm = from s in viewModelList
                   select s;
             switch (sortOrder)
             {
                 case "name_desc":
-                    games = games.OrderByDescending(s => s.Name);
+                    gamesVm = gamesVm.OrderByDescending(s => s.Name);
                     break;
                 case "Rate":
-                    games = games.OrderBy(s => s.AvarageRate);
+                    gamesVm = gamesVm.OrderBy(s => s.AvarageRate);
                     break;
                 case "rate_desc":
-                    games = games.OrderByDescending(s => s.AvarageRate);
+                    gamesVm = gamesVm.OrderByDescending(s => s.AvarageRate);
                     break;
                 case "Category":
-                    games = games.OrderBy(s => s.CategoryName);
+                    gamesVm = gamesVm.OrderBy(s => s.CategoryName);
                     break;
                 case "category_desc":
-                    games = games.OrderByDescending(s => s.CategoryName);
+                    gamesVm = gamesVm.OrderByDescending(s => s.CategoryName);
                     break;
                 case "Publisher":
-                    games = games.OrderBy(s => s.Publisher);
+                    gamesVm = gamesVm.OrderBy(s => s.Publisher);
                     break;
                 case "publisher_desc":
-                    games = games.OrderByDescending(s => s.Publisher);
+                    gamesVm = gamesVm.OrderByDescending(s => s.Publisher);
                     break;
                 default:
-                    games = games.OrderBy(s => s.Name);
+                    gamesVm = gamesVm.OrderBy(s => s.Name);
                     break;
             }
-
+         
             int pageSize = 10;
             int pageNumber = (page ?? 1);
-            return View(games.ToPagedList(pageNumber, pageSize));
+            return View(gamesVm.ToPagedList(pageNumber, pageSize));
         
         }
 
@@ -101,19 +98,19 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Game game = db.Games.Find(id);
-            var gameViewModel = Mapper.Map<Game,GameDetailsViewModel>(game);
+            var game = _gameService.GetGameById((int)id);            
             if (game == null)
             {
                 return HttpNotFound();
             }
+            var gameViewModel = Mapper.Map<Game, GameDetailsViewModel>(game);
             return View(gameViewModel);
         }
 
         // GET: /Game/Create
         public ActionResult Create()
         {
-            ViewBag.CategoryId = new SelectList(db.Categorys, "Id", "Name");
+            ViewBag.CategoryId = new SelectList(_gameService.GetCategoriesDictionary(), "Id", "Name");
             return View();
         }
 
@@ -123,8 +120,7 @@ namespace SerwisPlanszowkowy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(GameCreateEditViewModel model, HttpPostedFileBase image)
         {
-           
-          
+                    
             var game = new Game
             {
                 Accepted = false,
@@ -146,12 +142,11 @@ namespace SerwisPlanszowkowy.Controllers
        
             if (ModelState.IsValid )
             {
-                db.Games.Add(game);
-                db.SaveChanges();
+                _gameService.CreateGame(game);
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryId = new SelectList(db.Categorys, "Id", "Name", game.CategoryId);
+            ViewBag.CategoryId = new SelectList(_gameService.GetCategoriesDictionary(), "Id", "Name", game.CategoryId);
             return View(model);
         }
 
@@ -162,73 +157,53 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Game game = db.Games.Find(id);
+            Game game = _gameService.GetGameById((int)id);
             var model = Mapper.Map<Game, GameCreateEditViewModel>(game);
             model.OldPhoto = game.Photo;
             if (game == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(db.Categorys, "Id", "Name", game.CategoryId);
+            ViewBag.CategoryId = new SelectList(_gameService.GetCategoriesDictionary(), "Id", "Name", game.CategoryId);
             return View(model);
         }
 
         // POST: /Game/Edit/5
 
         [HttpPost]
-  [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(GameCreateEditViewModel model, HttpPostedFileBase image)
         {
-            Game game;
+            var game = new Game
+            {
+                Id = model.Id,
+                Accepted = false,
+                PublishedDate = model.PublishedDate,
+                CategoryId = int.Parse(model.CategoryId),
+                MaxNumberOfPlayers = model.MaxNumberOfPlayers,
+                MinNumberOfPlayers = model.MinNumberOfPlayers,
+                PlayingTime = model.PlayingTime,
+                Description = model.Description,
+                SuggestedAge = model.SuggestedAge,
+                Name = model.Name,
+                Publisher = model.Publisher              
+            };
             if (image == null)
             {
-               game = new Game
-                {
-                    Id = model.Id,
-                    Accepted = false,
-                    PublishedDate = model.PublishedDate,
-                    CategoryId = int.Parse(model.CategoryId),
-                    MaxNumberOfPlayers = model.MaxNumberOfPlayers,
-                    MinNumberOfPlayers = model.MinNumberOfPlayers,
-                    PlayingTime = model.PlayingTime,
-                    Description = model.Description,
-                    SuggestedAge = model.SuggestedAge,
-                    Name = model.Name,
-                    Publisher = model.Publisher,
-                    Photo = model.OldPhoto
-
-                };
+                game.Photo = model.OldPhoto;
             }
             else
-            {
-                 game = new Game
-                {
-                    Id = model.Id,
-                    Accepted = false,
-                    PublishedDate = model.PublishedDate,
-                    CategoryId = int.Parse(model.CategoryId),
-                    MaxNumberOfPlayers = model.MaxNumberOfPlayers,
-                    MinNumberOfPlayers = model.MinNumberOfPlayers,
-                    PlayingTime = model.PlayingTime,
-                    Description = model.Description,
-                    SuggestedAge = model.SuggestedAge,
-                    Name = model.Name,
-                    Publisher = model.Publisher
-
-                };
-                
-                
+            {   
                 game.Photo = new byte[image.ContentLength];
                 image.InputStream.Read(game.Photo, 0, image.ContentLength);
             }
             
             if (ModelState.IsValid)
             {
-                db.Entry(game).State = EntityState.Modified;
-                db.SaveChanges();
+                _gameService.EditGame(game);
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryId = new SelectList(db.Categorys, "Id", "Name", game.CategoryId);
+            ViewBag.CategoryId = new SelectList(_gameService.GetCategoriesDictionary(), "Id", "Name", game.CategoryId);
             return View(model);
         }
 
@@ -239,7 +214,7 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Game game = db.Games.Find(id);
+            Game game = _gameService.GetGameById((int)id);
           
             if (game == null)
             {
@@ -254,27 +229,17 @@ namespace SerwisPlanszowkowy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Game game = db.Games.Find(id);
-            db.Games.Remove(game);
-            db.SaveChanges();
+            _gameService.RemoveGame(id);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
+     
         // GET: /Game/
         public ActionResult NotAcceptedGames()
         {
-           
-            var games = db.Games.Include(g => g.Category).Where(c => c.Accepted == false);
-           
+
+            var games = _gameService.GetNotAcceptedGames();
+
             var viewModelList = (Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games));
             return View(viewModelList.ToList());
         }
@@ -283,7 +248,7 @@ namespace SerwisPlanszowkowy.Controllers
 
         public ActionResult Top20Games()
         {
-            var games = db.Games.Include(g => g.Category).Where(c => c.Accepted == true);
+            var games = _gameService.GetAcceptedGames();
             var viewModelList = (Mapper.Map<IEnumerable<Game>, IEnumerable<GameDetailsViewModel>>(games));
             return View(viewModelList.ToList().OrderByDescending(t => t.AvarageRate));
         }

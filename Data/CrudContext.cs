@@ -18,20 +18,20 @@ namespace Data
         {
         }
         
-        public DbSet<Game> Games { get; set; }
-        public DbSet<Rate> Rates { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Review> Reviews { get; set; }
-        public DbSet<Category> Categorys { get; set; }
-        public DbSet<News> News { get; set; }
-        public DbSet<Gameplay> Gameplays{ get; set; }
-        public DbSet<Problem> Problems { get; set; }
+        public virtual DbSet<Game> Games { get; set; }
+        public virtual DbSet<Rate> Rates { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<Category> Categorys { get; set; }
+        public virtual DbSet<News> News { get; set; }
+        public virtual DbSet<Gameplay> Gameplays{ get; set; }
+        public virtual DbSet<Problem> Problems { get; set; }
+        public override IDbSet<User> Users { get; set; }
 
-      protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
        {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             base.OnModelCreating(modelBuilder);
-        }
-
+        }      
     }
 }

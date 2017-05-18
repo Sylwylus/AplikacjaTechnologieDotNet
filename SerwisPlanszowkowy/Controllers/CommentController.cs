@@ -8,17 +8,24 @@ using System.Web;
 using System.Web.Mvc;
 using Data;
 using Domain.Model;
+using Application.Services;
 
 namespace SerwisPlanszowkowy.Controllers
 {
     public class CommentController : Controller
     {
-        private CrudContext db = new CrudContext();
+        private ICommentService _commentService { get; set; }
+        private IGameService _gameService { get; set; }
+        public CommentController(ICommentService commentService, IGameService gameService)
+        {
+            _commentService = commentService;
+            _gameService = gameService;
+        }
 
         // GET: Comments
         public ActionResult Index()
         {
-            var comments = db.Comments.Include(c => c.Game).Include(c => c.User);
+            var comments = _commentService.GetComments();
             return View(comments.ToList());
         }
 
@@ -29,7 +36,7 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = db.Comments.Find(id);
+            Comment comment = _commentService.GetCommentById((int)id);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -40,15 +47,7 @@ namespace SerwisPlanszowkowy.Controllers
         // GET: Comments/Create
         public ActionResult Create(int gameId)
         {
-           
-            var game = db.Games.Include(c => c.Rates).First(c => c.Id == gameId);
-
-            var comment = new Comment()
-            {
-                GameId = gameId,
-                Game = game,
-                PublishedDate = DateTime.Today
-            };
+            var comment = _commentService.GetEmptyCommentForGame(gameId);
 
             return View(comment);
         }
@@ -60,23 +59,14 @@ namespace SerwisPlanszowkowy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,PublishedDate,Content,GameId,UserId")] Comment comment)
         {  
-            foreach (var item in db.Users)
-            {
-                if (item.UserName == User.Identity.Name)
-                {
-                    comment.UserId = item.Id;
-                }
-            }
-            comment.PublishedDate = DateTime.Now;
-
+           
             if (ModelState.IsValid)
             {
-                db.Comments.Add(comment);
-                db.SaveChanges();
+                _commentService.CreateComment(comment, User.Identity.Name);
                 return RedirectToAction("Details", "Game", new { Id = comment.GameId });
             }
 
-            ViewBag.GameId = new SelectList(db.Games, "Id", "Name", comment.GameId);
+            ViewBag.GameId = new SelectList(_gameService.GetAcceptedGames(), "Id", "Name", comment.GameId);
             return View(comment);
         }
 
@@ -87,7 +77,7 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = db.Comments.Find(id);
+            Comment comment = _commentService.GetCommentById((int)id);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -103,8 +93,7 @@ namespace SerwisPlanszowkowy.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(comment).State = EntityState.Modified;
-                db.SaveChanges();
+                _commentService.EditComment(comment);
                 return RedirectToAction("Details", "Game", new { Id = comment.GameId });
             }
           
@@ -118,7 +107,7 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Comment comment = db.Comments.Find(id);
+            Comment comment = _commentService.GetCommentById((int)id);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -131,19 +120,10 @@ namespace SerwisPlanszowkowy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Comment comment = db.Comments.Find(id);
-            db.Comments.Remove(comment);
-            db.SaveChanges();
+            _commentService.RemoveComment(id);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+       
     }
 }

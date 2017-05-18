@@ -13,11 +13,20 @@ namespace SerwisPlanszowkowy.Controllers
 {
     public class RolesController : Controller
     {
-        private CrudContext db = new CrudContext();
+
+
+        private CrudContext db { get; set; }
+        private AccountController account { get; set; }
+
+        public RolesController(CrudContext context, AccountController account)
+        {
+            db = context;
+            this.account = account;
+        }
 
         public ActionResult Index()
         {
-            // prepopulat roles for the view dropdown
+           
             var list = db.Roles.OrderBy(r => r.Name).ToList().Select(rr =>
 
             new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
@@ -30,12 +39,12 @@ namespace SerwisPlanszowkowy.Controllers
         public ActionResult RoleAddToUser(string UserName, string RoleName)
         {
             User user = db.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-            var account = new AccountController();
+            
             account.ApplicationUserManager.AddToRole(user.Id, RoleName);
             
             ViewBag.ResultMessage = "Role created successfully !";
 
-            // prepopulat roles for the view dropdown
+     
             var list = db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
 
@@ -49,11 +58,11 @@ namespace SerwisPlanszowkowy.Controllers
             if (!string.IsNullOrWhiteSpace(UserName))
             {
                 User user = db.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-                var account = new AccountController();
+              
 
                 ViewBag.RolesForThisUser = account.ApplicationUserManager.GetRoles(user.Id);
 
-                // prepopulat roles for the view dropdown
+            
                 var list = db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
                 ViewBag.Roles = list;
             }
@@ -66,7 +75,7 @@ namespace SerwisPlanszowkowy.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteRoleForUser(string UserName, string RoleName)
         {
-            var account = new AccountController();
+          
             User user = db.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
             if (account.ApplicationUserManager.IsInRole(user.Id, RoleName))
@@ -78,7 +87,7 @@ namespace SerwisPlanszowkowy.Controllers
             {
                 ViewBag.ResultMessage = "This user doesn't belong to selected role.";
             }
-            // prepopulat roles for the view dropdown
+          
             var list = db.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
             ViewBag.Roles = list;
 

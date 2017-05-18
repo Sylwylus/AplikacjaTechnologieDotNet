@@ -18,21 +18,5 @@ namespace Domain.Model
         public CustomRole() { }
         public CustomRole(string name) { Name = name; }
     }
-
     
-
-
-   /* public class ApplicationUser : IdentityUser
-    {
-    }
-
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-    {
-        public ApplicationDbContext()
-            : base("DefaultConnection")
-        {
-        }
-    }*/
-
-  
 }

@@ -15,10 +15,10 @@ namespace SerwisPlanszowkowy.App_Start
         public static void InitialRoleUser()
         {
             
-            var account = new AccountController();
+           /* var account = new AccountController(new Data.CrudContext(), new Data.Identity.ApplicationUserManager(new CustomUserStore );
             account.ApplicationUserManager.AddToRole(2, "Administrator");
             account.ApplicationUserManager.AddToRole(2, "Moderator");
-            account.ApplicationUserManager.AddToRole(3, "Moderator");
+            account.ApplicationUserManager.AddToRole(3, "Moderator");*/
        
         }
 

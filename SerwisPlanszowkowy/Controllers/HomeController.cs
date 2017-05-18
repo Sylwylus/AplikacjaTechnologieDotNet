@@ -12,30 +12,39 @@ using Domain;
 using Domain.Model;
 using Data;
 using SerwisPlanszowkowy.ViewModels;
+using Application.Services;
 
 namespace SerwisPlanszowkowy.Controllers
 {
     public class HomeController : Controller
     {
-        private CrudContext db = new CrudContext();
+        private INewsService _newsService { get; set; }
+        private IGameService _gameService { get; set; }
+        private IReviewService _reviewService { get; set; }
+        public  HomeController(INewsService newsService, IGameService gameService, IReviewService reviewService)
+        {
+            _newsService = newsService;
+            _gameService = gameService;
+            _reviewService = reviewService;
+        }
         public ActionResult Index()
         {
-            var newses = db.News.Include(n => n.User);
-            var games = db.Games;
-            var reviews = db.Reviews.Include(r => r.User).Include(r => r.Game);
-            var viewModelList = (Mapper.Map<IEnumerable<News>, IEnumerable<NewsViewModel>>(newses));
-            var viewModelList2 = (Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games));
-           // var viewModelList3 = (Mapper.Map<IEnumerable<Review>, IEnumerable<ReviewViewModel>>(reviews));
-            ViewBag.game = viewModelList2.ToList().Where(v => v.Accepted == true).OrderByDescending(v => v.AvarageRate).Take(5);
-           // ViewBag.review = viewModelList3.ToList().Where(v => v.Accepted == true).OrderByDescending(v => v.PublishedDate).Take(5);
-            return View(viewModelList.ToList().OrderByDescending(l => l.PublishedDate));
+            var newses = _newsService.GetNews();
+            var games = _gameService.GetAcceptedGames();
+            var reviews = _reviewService.GetReviews();
+            var newsVm = (Mapper.Map<IEnumerable<News>, IEnumerable<NewsViewModel>>(newses));
+            var gamesVm = (Mapper.Map<IEnumerable<Game>, IEnumerable<GameViewModel>>(games));
+            var reviewsVm = (Mapper.Map<IEnumerable<Review>, IEnumerable<ReviewViewModel>>(reviews));
+            ViewBag.game = gamesVm.OrderByDescending(v => v.AvarageRate).Take(5);
+            ViewBag.review = reviewsVm.OrderByDescending(v => v.PublishedDate).Take(5);
+            return View(newsVm.OrderByDescending(l => l.PublishedDate));
         }
 
         public ActionResult OldNews()
         {
-            var newses = db.News.Include(n => n.User);
-            var viewModelList = (Mapper.Map<IEnumerable<News>, IEnumerable<NewsViewModel>>(newses));
-            return View(viewModelList.ToList().OrderByDescending(l => l.PublishedDate));
+            var news = _newsService.GetNews();
+            var newsVm = (Mapper.Map<IEnumerable<News>, IEnumerable<NewsViewModel>>(news));
+            return View(newsVm.OrderByDescending(l => l.PublishedDate));
         }
         
     }
