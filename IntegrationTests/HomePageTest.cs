@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 
 namespace IntegrationTests
 {
@@ -28,7 +27,7 @@ namespace IntegrationTests
             AssertCurrentPage(BaseUrl + path);
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void GoToGameDetails()
         {
             String path = "/Game/Details/14";

@@ -1,9 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenQA.Selenium;
 
 namespace IntegrationTests
 {
     [TestClass]
-    public class ModeratorPanelTest : BaseWebDriverTest
+    public class GamesToAcceptTest : BaseWebDriverTest
     {
         [ClassInitialize]
         public static void ClassInitialize(TestContext context)
@@ -17,10 +18,11 @@ namespace IntegrationTests
             BaseWebDriverTest.ClassCleanup();
         }
 
-        // [TestMethod]
+        [TestMethod]
         public void ShowNotAcceptedGames()
         {
             Open("/Game/NotAcceptedGames");
+            AssertTextContains(By.TagName("h2"), "Games to accept");
         }
     }
 }
