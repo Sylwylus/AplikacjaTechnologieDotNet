@@ -32,11 +32,7 @@ namespace SerwisPlanszowkowy.Controllers
             ApplicationUserManager = applicationUserManager;
         }
 
-      
-
-      
-
-     
+           
 
         //
         // GET: /Account/Login
@@ -485,9 +481,52 @@ namespace SerwisPlanszowkowy.Controllers
         }
 
 
-      
 
-     
+
+
+
+
+        // GET: /Game/UserProfileData/5
+        public ActionResult UserGameplays(int? id)
+        {
+            foreach (var item in db.Users)
+            {
+                if (item.UserName == User.Identity.Name)
+                {
+                    id = item.Id;
+                }
+            }
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var gameplays = db.Gameplays.Include(g => g.Game).Where(g => g.UserId == id);
+
+
+            var viewModelList = (Mapper.Map<IEnumerable<Gameplay>, IEnumerable<GameplayViewModel>>(gameplays));
+            return View(viewModelList.ToList());
+        }
+
+        // GET: /Game/AddedReviews/5
+        public ActionResult AddedReviews(int? id)
+        {
+            foreach (var item in db.Users)
+            {
+                if (item.UserName == User.Identity.Name)
+                {
+                    id = item.Id;
+                }
+            }
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var reviews = db.Reviews.Include(g => g.Game).Where(g => g.UserId == id);
+
+
+
+            return View(reviews.ToList());
+        }
 
         // GET: /Game/AddedComments/5
         public ActionResult AddedComments(int? id)
@@ -504,10 +543,11 @@ namespace SerwisPlanszowkowy.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var comments = db.Comments.Include(g => g.Game).Where(g => g.UserId == id);
-            
-           
+
+
             return View(comments.ToList());
         }
+
 
 
         // GET: /Game/UserProfileData/5
