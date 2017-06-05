@@ -1,0 +1,128 @@
+﻿@model SerwisPlanszowkowy.ViewModels.UserDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Moderator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moderator)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Administrator)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Administrator)
+        </dd>
+
+        <dt>
+            Rates:
+        </dt>
+
+        <dd>
+            @{
+                float srednia=0;
+                @Html.DisplayFor(model => model.Rates.Count)
+                if (!Model.Rates.Count().Equals(0))
+                {
+                    foreach (var item in Model.Rates)
+                    {
+                        srednia = srednia + item.Value;
+                    }
+                    srednia = srednia / Model.Rates.Count;
+                    srednia = (float)Math.Round(srednia, 2);
+                    @Html.DisplayName(" (avarage ") @srednia @Html.DisplayName(")")
+                }
+                else
+                {
+                    @Html.DisplayName(" (avarage ") @srednia @Html.DisplayName(")")
+                }
+            }
+            
+        </dd>
+
+        <dt>
+            Comments:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comments.Count) @Html.DisplayName(" added comments")
+        </dd>
+
+        <dt>
+            Reviews: 
+        </dt>
+
+        <dd>
+            @if (!Model.Reviews.Count().Equals(0))
+            {
+                @Html.DisplayFor(model => model.Reviews.Count) @Html.DisplayName(" added reviews")<br />
+                foreach (var item in Model.Reviews)
+                {
+                    <br />
+                    @Html.ActionLink(item.Title, "/Details/" + item.Id, "Review")
+                    <br />@Html.DisplayFor(modelItem => item.Game.Name)
+                    <br />
+                }
+            }
+            else
+            {
+                <i>no reviews</i>
+            }
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

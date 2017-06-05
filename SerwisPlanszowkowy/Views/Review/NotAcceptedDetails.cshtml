@@ -1,0 +1,64 @@
+﻿@model SerwisPlanszowkowy.ViewModels.NotAcceptedReviewViewModel
+@{
+    ViewBag.Title = "NotAcceptedDetails";
+}
+
+<h2>Accept this review</h2>
+
+<hr />
+
+
+
+<p>Review about @Html.ActionLink(Model.Game.Name, "/Details/" + Model.Game.Id, "Game") written by @Html.DisplayFor(model => model.User.UserName) : </p>
+<br />
+
+<div style="width: 500px; height:  auto; border-width: 1px; border-style:solid">
+    <h4 style="margin-left: 20px;">@Html.DisplayFor(model => model.Title)</h4>
+    <p style="padding-left: 20px; border-width: 1px; border-top-style: solid">@Html.DisplayFor(model => model.Content)</p>
+</div>
+<br />
+
+
+
+<br /><br />
+
+<table style="width: 100px;" class="table">
+<tr >
+
+    <td>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.Accepted)
+            @Html.HiddenFor(model => model.Content)
+            @Html.HiddenFor(model => model.GameId)
+            @Html.HiddenFor(model => model.UserId)
+            @Html.HiddenFor(model => model.Title)
+            @Html.HiddenFor(model => model.PublishedDate)
+
+            <input type="submit" value="Accept" class="btn btn-default" />
+
+
+        }
+    </td>
+    <td>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.Delete, new { @Value = true })
+
+            <input type="submit" value="Delete" class="btn btn-default" />
+
+        }
+
+    </td>
+</tr>
+
+    </table>
+         

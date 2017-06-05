@@ -1,0 +1,25 @@
+﻿@model Domain.Model.Review
+
+@{
+    ViewBag.Title = "Details";
+}
+<br/>
+<br/>
+<p>Review about @Html.ActionLink(Model.Game.Name, "/Details/" + Model.Game.Id, "Game") written by @Html.DisplayFor(model => model.User.UserName) : </p>
+<br/>
+
+<div style="width: 500px; height:  auto; border-width: 1px; border-style:solid">
+    <h4 style="margin-left: 20px;">@Html.DisplayFor(model => model.Title)</h4>
+    <p style="padding-left: 20px; border-width: 1px; border-top-style: solid">@Html.DisplayFor(model => model.Content)</p>
+</div>
+<br />
+
+
+
+<br /><br />
+
+   
+<p>
+
+    @Html.ActionLink("Go to reviews", "Index")
+</p>

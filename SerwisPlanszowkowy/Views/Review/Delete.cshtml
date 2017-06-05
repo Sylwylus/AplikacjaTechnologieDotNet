@@ -1,0 +1,34 @@
+﻿@model Domain.Model.Review
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+
+<h3>Are you sure you want to delete this?</h3>
+<hr/>
+<div>
+   
+    <p>Review about @Html.ActionLink(Model.Game.Name, "/Details/" + Model.Game.Id, "Game") written by @Html.DisplayFor(model => model.User.UserName) : </p>
+    <br />
+
+    <div style="width: 500px; height:  auto; border-width: 1px; border-style:solid">
+        <h4 style="margin-left: 20px;">@Html.DisplayFor(model => model.Title)</h4>
+        <p style="padding-left: 20px; border-width: 1px; border-top-style: solid">@Html.DisplayFor(model => model.Content)</p>
+    </div>
+    <br />
+
+
+
+    <br /><br />
+
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

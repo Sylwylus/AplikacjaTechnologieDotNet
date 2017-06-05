@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Domain.Model.Review>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Reviews</h2>
+
+@if (!User.Identity.Name.Equals(""))
+{
+<p>
+    @Html.ActionLink("Create New", "CreateFromIndex")
+</p>
+}
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayName( "Game")
+        </th>
+        <th>
+            @Html.DisplayName( "Author")
+        </th>
+        <th>
+            @Html.DisplayName("Published date")
+        </th>
+      
+     
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    if(item.Accepted.Equals(true))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Game.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PublishedDate)
+            </td>
+       
+       
+            <td>
+                @Html.ActionLink("Read", "Details", new { id=item.Id })
+                @if (User.IsInRole("Moderator"))
+                    {
+                        String kreseczka=" | ";
+                        @kreseczka @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                    }
+            </td>
+        </tr>
+    }
+}
+
+</table>

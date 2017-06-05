@@ -1,0 +1,105 @@
+﻿@model  SerwisPlanszowkowy.ViewModels.StatisticsViewModel
+
+@{ 
+ViewBag.Title = "Statistics";
+}
+
+<h2>Statistics</h2>
+<hr/>
+
+<h4>Statistics from last year</h4>
+<br/>
+<div id="tabs">
+    <ul>
+        <li><a href="#tabs-1">Users</a></li>
+        <li><a href="#tabs-2">Games</a></li>
+        <li><a href="#tabs-3">Reviews</a></li>
+        <li><a href="#tabs-4">Comments</a></li>
+        <li><a href="#tabs-5">Rates</a></li>
+        <li><a href="#tabs-6">News</a></li>
+    </ul>
+    
+    <div id="tabs-1">
+        @(Model.UserChart)
+    </div>
+    <div id="tabs-2">
+        @(Model.GameChart)
+    </div>
+    <div id="tabs-3">
+        @(Model.ReviewChart)
+    </div>
+    <div id="tabs-4">
+        @(Model.CommentChart)
+    </div>
+    <div id="tabs-5">
+        @(Model.RateChart)
+    </div>
+    <div id="tabs-6">
+        @(Model.NewsChart)
+    </div>
+</div>
+<br/>
+<hr/>
+<h4>Statistics from last month</h4>
+<br/>
+<div id="tabs2">
+    <ul>
+        <li><a href="#tabs-7">Users</a></li>
+        <li><a href="#tabs-8">Games</a></li>
+        <li><a href="#tabs-9">Reviews</a></li>
+        <li><a href="#tabs-10">Comments</a></li>
+        <li><a href="#tabs-11">Rates</a></li>
+        <li><a href="#tabs-12">News</a></li>
+    </ul>
+
+    <div id="tabs-7">
+        @(Model.UserMonthChart)
+    </div>
+    <div id="tabs-8">
+        @(Model.GameMonthChart)
+    </div>
+    <div id="tabs-9">
+        @(Model.ReviewMonthChart)
+    </div>
+    <div id="tabs-10">
+        @(Model.CommentMonthChart)
+    </div>
+    <div id="tabs-11">
+        @(Model.RateMonthChart)
+    </div>
+    <div id="tabs-12">
+        @(Model.NewsMonthChart)
+    </div>
+</div>
+<br/>
+<hr/>
+<h4>The best Users and Moderators - Previous month</h4>
+<br/>
+<div id="tabs3">
+    <ul>
+        <li><a href="#tabs-13">Users</a></li>
+        <li><a href="#tabs-14">Moderators</a></li>
+       
+    </ul>
+
+    <div id="tabs-13">
+        @(Model.ActiveUsersChart)
+    </div>
+    <div id="tabs-14">
+        @(Model.ActiveModeratorsChart)
+    </div>
+
+</div>
+
+
+<script>
+    $(function () {
+        $("#tabs").tabs();
+    });
+    $(function () {
+        $("#tabs2").tabs();
+    });
+    $(function () {
+        $("#tabs3").tabs();
+    });
+</script>

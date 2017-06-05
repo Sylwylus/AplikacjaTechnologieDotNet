@@ -23,6 +23,6 @@ namespace SerwisPlanszowkowy.ViewModels
         public virtual Game Game { get; set; }
         public virtual User User { get; set; }
 
-       // public IEnumerable<GroupedSelectListItem> Games { get; set; }
+        public IEnumerable<GroupedSelectListItem> Games { get; set; }
     }
 }

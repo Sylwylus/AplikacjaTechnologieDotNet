@@ -17,6 +17,7 @@ namespace Application.Services
         IEnumerable<Game> GetFilteredGames(string searchString, int? categoryFilter);
         void CreateGame(Game game);
         void EditGame(Game game);
+        void AcceptGame(int id);
         void RemoveGame(int id);
         IEnumerable<Category> GetCategoriesDictionary();
 
@@ -84,7 +85,13 @@ namespace Application.Services
             _context.SaveChanges();
         }
 
-
+        public void AcceptGame(int id)
+        {
+            var game = _context.Games.Single(r => r.Id == id);
+            game.Accepted = true;
+            _context.Entry(game).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
 
         public void RemoveGame(int id)
         {

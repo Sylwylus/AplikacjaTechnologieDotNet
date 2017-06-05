@@ -69,6 +69,23 @@
             }
         </table>
     </div>
-   
+    <div>
+        <hr />
+        <h3>Last added reviews</h3>
+        <hr />
+        @{
+
+            foreach (var item in @ViewBag.review)
+            {
+                @Html.ActionLink((string)item.Title, "/Details/" + (int)item.Id, "Review")
+                <br />
+                @item.Game.Name
+                <br />
+                <i>@item.PublishedDate @item.User.UserName</i>
+                <br /><br />
+
+            }
+        }
+    </div>
 </div>
 <div style="clear:both"></div>

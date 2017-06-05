@@ -1,0 +1,34 @@
+﻿@model IEnumerable<SerwisPlanszowkowy.ViewModels.GameplayViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Model.UserName gameplays</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GameName)
+        </th>
+      <th>
+            @Html.DisplayNameFor(model => model.PublishedDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GameName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PublishedDate)
+        </td>
+    </tr>
+}
+
+</table>

@@ -244,7 +244,50 @@ namespace SerwisPlanszowkowy.Controllers
             return View(viewModelList.ToList());
         }
 
-    
+        // GET: /Game/Accept/5
+        public ActionResult Accept(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Game game = _gameService.GetGameById((int)id);
+            var gameViewModel = Mapper.Map<Game, NotAcceptedGameDetailsViewModel>(game);
+            gameViewModel.Delete = false;
+            if (game == null)
+            {
+                return HttpNotFound();
+            }
+            return View("NotAcceptedDetails", gameViewModel);
+        }
+
+
+
+        // POST: /Game/Accept/5
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Accept(NotAcceptedGameDetailsViewModel model)
+        {
+
+            if (model.Delete == false)
+            {
+                if (ModelState.IsValid)
+                {
+                    _gameService.AcceptGame(model.Id);
+                    return RedirectToAction("NotAcceptedGames");
+                }
+            }
+            else
+            {
+
+                _gameService.RemoveGame(model.Id);
+                return RedirectToAction("NotAcceptedGames");
+            }
+
+
+            return View("NotAcceptedDetails", model);
+        }
 
         public ActionResult Top20Games()
         {

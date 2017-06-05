@@ -34,8 +34,11 @@ namespace SerwisPlanszowkowy.ViewModels
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
 
-        public virtual ICollection<Rate> Rates { get; set; }     
+
+        public virtual ICollection<Rate> Rates { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
- 
+        public virtual ICollection<Gameplay> Gameplays { get; set; }
+
     }
 }

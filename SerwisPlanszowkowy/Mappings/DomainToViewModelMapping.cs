@@ -34,6 +34,20 @@ namespace SerwisPlanszowkowy.Mappings
                 .ForMember(dest => dest.NumberOfAddedGameplays, opts => opts.MapFrom(src => src.Gameplays.Count()));
             CreateMap<Game, GameCreateEditViewModel>();
             CreateMap<Review, ReviewViewModel>();
+            CreateMap<Review, NotAcceptedReviewViewModel>();          
+            CreateMap<Gameplay, GameplayViewModel>()
+               .ForMember(dest => dest.GameName, opts => opts.MapFrom(src => src.Game.Name)).ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.UserName));
+           CreateMap<Gameplay, GameplayCreateEditViewModel>()
+              .ForMember(dest => dest.GameName, opts => opts.MapFrom(src => src.Game.Name)).ForMember(dest => dest.UserName, opts => opts.MapFrom(src => src.User.UserName));
+            CreateMap<User, UserDetailsViewModel>();
+            CreateMap<User, UserEditViewModel>();
+            CreateMap<User, UserStatisticsViewModel>()
+                .ForMember(dest => dest.NumberOfAddedComments, opts => opts.MapFrom(src => src.Comments.Count()))
+                .ForMember(dest => dest.NumberOfAddedRates, opts => opts.MapFrom(src => src.Rates.Count()))
+                .ForMember(dest => dest.NumberOfAddedReviews, opts => opts.MapFrom(src => src.Reviews.Count()))
+                .ForMember(dest => dest.NumberOfAddedGameplays, opts => opts.MapFrom(src => src.Gameplays.Count()));         
+            CreateMap<Game, NotAcceptedGameDetailsViewModel>().ForMember(dest => dest.CategoryName, opts => opts.MapFrom(src => src.Category.Name));
+            CreateMap<Problem, ProblemViewModel>();
         }
     }
 }

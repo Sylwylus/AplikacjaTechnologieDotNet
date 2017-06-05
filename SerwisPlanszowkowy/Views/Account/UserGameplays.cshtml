@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SerwisPlanszowkowy.ViewModels.GameplayViewModel>
+
+<h2>Your gameplays</h2>
+
+
+@if (Model.Any())
+{
+   <p>
+    @Html.ActionLink("Add new gameplay",  "Create", "Gameplay")
+</p>
+     <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GameName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PublishedDate)
+            </th>
+   
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GameName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishedDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "Gameplay", new { id = item.Id }, null) |
+                    @Html.ActionLink("Delete", "Delete", "Gameplay", new {id = item.Id}, null) 
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+else
+{
+     <hr />
+    <br/>
+    <br/>
+   
+     @Html.Label("You don't have any added gameplay")
+    <br/>
+    <br/>
+ 
+    @Html.ActionLink("Add new gameplay",  "Create", "Gameplay")
+    <br/>
+    <br/>
+    <br/>
+    
+}

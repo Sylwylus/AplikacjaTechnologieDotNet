@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SerwisPlanszowkowy.ViewModels.GameViewModel>
+@{
+    ViewBag.Title = "NotAcceptedGames";
+}
+
+<h2>Games to accept</h2>
+
+<hr />
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Photo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Publisher)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+           
+            <tr>
+                <td>
+                    <img src='@item.PhotoSource' style="max-height:75px; max-width:75px;"  />
+                </td>
+                <td valign="middle">
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td valign="middle">
+                    @Html.DisplayFor(modelItem => item.Publisher)
+                </td>
+                <td valign="middle">
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td valign="middle">
+                    @Html.ActionLink("Accept this", "Accept", new { id = item.Id }) 
+                      
+                </td>
+            </tr>
+          
+        }
+    </table>

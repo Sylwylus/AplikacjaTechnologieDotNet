@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Domain.Model.Review>
+@{
+    ViewBag.Title = "AddedReviews";
+}
+
+<h2>My reviews</h2>
+
+<p>
+    @Html.ActionLink("Create New", "CreateFromIndex", "Review", null, null)
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayName("Game")
+        </th>
+        
+        <th>
+            @Html.DisplayName("Published date")
+        </th>
+        <th>
+            @Html.DisplayName("Accepted")
+        </th>
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+       
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.Name)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.PublishedDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Accepted)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Read", "Details", "Review", new { id = item.Id }, null)|
+                  
+                     
+                       @Html.ActionLink("Delete", "Delete", "Review" ,new { id = item.Id },null)
+                    
+                </td>
+            </tr>
+        }
+ 
+
+</table>
